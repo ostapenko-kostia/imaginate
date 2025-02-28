@@ -121,7 +121,7 @@ export function GenerateLogo() {
 								href={data?.data?.url}
 								download
 							>
-								<Button className='w-full mx-auto'>
+								<Button className='w-full mx-auto mt-5'>
 									<DownloadIcon /> Download
 								</Button>
 							</Link>

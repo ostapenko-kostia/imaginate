@@ -34,10 +34,10 @@ export async function POST(req: NextRequest) {
 
 		const result = await hf.textToImage({
 			model: models[validatedBody.quality],
-			inputs: `Generate minimalistic logo (image next to the title in row) with neutral background from this prompt: ${validatedBody.prompt}`
+			inputs: `Generate minimalistic logo (image next to the title in row) with neutral background and easy to read text from this prompt: ${validatedBody.prompt}`
 		})
 
-		const key = `${Date.now()}.webp`
+		const key = `${Date.now()}.png`
 		const bytes = await result.arrayBuffer()
 		const buffer = Buffer.from(bytes)
 

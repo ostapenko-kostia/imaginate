@@ -8,7 +8,7 @@ export function Title() {
 				Logo Generator
 			</h1>
 			<p className='text-center text-xl mt-5 max-[500px]:text-lg max-[400px]:text-base'>
-				This is an AI Logo Generator. It creates an logo from scratch from a text description.
+				This is an AI Logo Generator. It creates a logo from scratch from a text description.
 			</p>
 		</div>
 	)
