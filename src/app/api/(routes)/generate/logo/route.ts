@@ -1,10 +1,10 @@
-import { handleApiError } from '@/app/api/exceptions/handleApiError'
+import { handleApiError } from '@/app/api/(exceptions)/handleApiError'
 import { hf } from '@/lib/huggingface'
 import { s3Client } from '@/lib/s3'
 import { PutObjectCommand } from '@aws-sdk/client-s3'
 import Joi from 'joi'
 import { NextRequest, NextResponse } from 'next/server'
-import { ApiError } from '../../exceptions/apiError'
+import { ApiError } from '../../../(exceptions)/apiError'
 
 const validationSchema = Joi.object({
 	prompt: Joi.string().required().min(1).max(250).messages({
