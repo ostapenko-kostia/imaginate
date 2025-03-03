@@ -1,3 +1,6 @@
+import { getAccessToken, setAccessToken } from '@/services/auth/auth.helper'
+import { authService } from '@/services/auth/auth.service'
+import { useAuthStore } from '@/store/auth.store'
 import axios from 'axios'
 import { toast } from 'sonner'
 
@@ -9,13 +12,37 @@ export const api = axios.create({
 	}
 })
 
+api.interceptors.request.use(config => {
+	const accessToken = getAccessToken()
+	if (accessToken && config) {
+		config.headers['Authorization'] = `Bearer ${accessToken}`
+	}
+	return config
+})
+
 api.interceptors.response.use(
 	response => response,
-	error => {
-		if (error?.response?.data) {
-			const { message } = error?.response?.data
-			toast.error(message)
-		} else if (error?.response?.status === 500) {
+	async error => {
+		const originalRequest = error.config
+
+		if (
+			(error?.response?.status === 401 || error?.response?.status === 403) &&
+			!originalRequest?._isRetry
+		) {
+			originalRequest._isRetry = true
+			try {
+				await authService.refresh()
+
+				return api.request(originalRequest)
+			} catch {
+				await authService.logout()
+			}
+		}
+
+		if (error) {
+			const message = error.response.data.message
+			if (!error.response.request.responseURL.includes('refresh')) toast.error(message)
+		} else if (error?.response?.status !== 401 && error?.response?.status !== 403) {
 			toast.error('Something went wrong. Try again later.')
 		}
 	}

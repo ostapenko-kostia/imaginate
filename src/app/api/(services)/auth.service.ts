@@ -76,11 +76,11 @@ class AuthService {
 
 	async refresh(refreshToken: string) {
 		// Validating Refresh Token
-		if (!refreshToken || !refreshToken.length) throw new ApiError('Unauthorized', 401)
+		if (!refreshToken || !refreshToken.length) throw new ApiError('Unauthorized', 400)
 
 		const userData: any = tokenService.validateRefresh(refreshToken)
 		const tokenFromDb = await tokenService.findRefresh(refreshToken)
-		if (!userData || !tokenFromDb) throw new ApiError('Unauthorized', 401)
+		if (!userData || !tokenFromDb) throw new ApiError('Unauthorized', 400)
 
 		// Checking user
 		const user = await prisma.user.findUnique({

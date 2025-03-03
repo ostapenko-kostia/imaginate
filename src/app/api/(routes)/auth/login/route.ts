@@ -4,6 +4,7 @@ import Joi from 'joi'
 import { ApiError } from '@/app/api/(exceptions)/apiError'
 import { authService } from '@/app/api/(services)/auth.service'
 import { cookies } from 'next/headers'
+import { TOKEN } from '@/typing/enums'
 
 const authLoginSchema = Joi.object({
 	email: Joi.string().required().email().messages({
@@ -14,7 +15,7 @@ const authLoginSchema = Joi.object({
 	password: Joi.string().required().min(8).trim().messages({
 		'any.required': 'Password is required',
 		'string.empty': 'Password is required',
-		'string.min': 'Password must be at least 8 characters long'
+		'string.min': 'Invalid Password'
 	})
 })
 
@@ -29,7 +30,7 @@ export async function POST(req: NextRequest) {
 
 		const userData = await authService.login(validatedBody)
 
-		;(await cookies()).set('refreshToken', userData.refreshToken, {
+		;(await cookies()).set(TOKEN.REFRESH_TOKEN, userData.refreshToken, {
 			expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
 			httpOnly: true
 		})

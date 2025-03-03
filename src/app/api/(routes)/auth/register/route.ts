@@ -4,6 +4,7 @@ import Joi from 'joi'
 import { ApiError } from '@/app/api/(exceptions)/apiError'
 import { authService } from '@/app/api/(services)/auth.service'
 import { cookies } from 'next/headers'
+import { TOKEN } from '@/typing/enums'
 
 
 const authRegisterSchema = Joi.object({
@@ -44,7 +45,7 @@ export async function POST(req: NextRequest) {
 
 		const userData = await authService.register(validatedBody)
 
-		;(await cookies()).set('refreshToken', userData.refreshToken, {
+		;(await cookies()).set(TOKEN.REFRESH_TOKEN, userData.refreshToken, {
 			expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
 			httpOnly: true
 		})
